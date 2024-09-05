@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: remainder-app
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/remainder
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+url:
+  api: /api/v1/reminder
+  users: /api/v1/user
+server:
+  port: 8081
