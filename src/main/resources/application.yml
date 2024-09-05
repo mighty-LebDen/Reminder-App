@@ -2,8 +2,8 @@ spring:
   application:
     name: remainder-app
   datasource:
-    username: postgres
-    password: root
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     url: jdbc:postgresql://localhost:5432/remainder
     driver-class-name: org.postgresql.Driver
   jpa:
