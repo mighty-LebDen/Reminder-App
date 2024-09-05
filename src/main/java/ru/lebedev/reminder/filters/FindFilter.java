@@ -1,3 +1,3 @@
-package ru.lebedev.remainder.filters;
+package ru.lebedev.reminder.filters;
 
 public record FindFilter() {}

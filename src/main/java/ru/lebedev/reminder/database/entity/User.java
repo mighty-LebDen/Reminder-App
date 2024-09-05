@@ -1,4 +1,4 @@
-package ru.lebedev.remainder.database.entity;
+package ru.lebedev.reminder.database.entity;
 
 import java.util.ArrayList;
 import java.util.List;

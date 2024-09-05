@@ -1,4 +1,4 @@
-package ru.lebedev.remainder.filters;
+package ru.lebedev.reminder.filters;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

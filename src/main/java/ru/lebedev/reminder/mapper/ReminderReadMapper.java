@@ -1,9 +1,9 @@
-package ru.lebedev.remainder.mapper;
+package ru.lebedev.reminder.mapper;
 
 import org.mapstruct.Mapper;
 
-import ru.lebedev.remainder.database.entity.Reminder;
-import ru.lebedev.remainder.dto.ReminderReadDto;
+import ru.lebedev.reminder.database.entity.Reminder;
+import ru.lebedev.reminder.dto.ReminderReadDto;
 @Mapper
 public interface ReminderReadMapper {
 	ReminderReadDto reminderToReminderReadDto(Reminder reminder);

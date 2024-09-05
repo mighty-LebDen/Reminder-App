@@ -1,4 +1,4 @@
-package ru.lebedev.remainder.dto;
+package ru.lebedev.reminder.dto;
 
 import java.time.LocalDate;
 

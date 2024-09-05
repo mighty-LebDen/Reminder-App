@@ -1,4 +1,4 @@
-package ru.lebedev.remainder.http.controllers;
+package ru.lebedev.reminder.http.controllers;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
-import ru.lebedev.remainder.dto.ReminderCreateDto;
-import ru.lebedev.remainder.dto.ReminderReadDto;
-import ru.lebedev.remainder.service.ReminderService;
+import ru.lebedev.reminder.dto.ReminderCreateDto;
+import ru.lebedev.reminder.dto.ReminderReadDto;
+import ru.lebedev.reminder.service.impl.ReminderService;
 
 @RestController
 @AllArgsConstructor
@@ -20,6 +20,7 @@ public class ReminderController {
 	
 	@PostMapping("/create")
 	public ReminderReadDto create(@RequestBody ReminderCreateDto dto) {
+		System.out.println(dto);
 		return reminderService.create(dto);
 	}
 

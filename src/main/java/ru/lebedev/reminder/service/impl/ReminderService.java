@@ -1,5 +1,6 @@
-package ru.lebedev.reminder.service;
+package ru.lebedev.reminder.service.impl;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +19,21 @@ import ru.lebedev.reminder.mapper.ReminderReadMapper;
 @Service
 @Transactional(readOnly = true)
 public class ReminderService {
+	private final UserServiceImpl userService;
 	private final ReminderRepository reminderRepository;
 	private final ReminderCreateMapper createMapper = Mappers.getMapper(ReminderCreateMapper.class);
 	private final ReminderReadMapper readMapper = Mappers.getMapper(ReminderReadMapper.class);
 	
 	@Transactional
 	public ReminderReadDto create(ReminderCreateDto reminderCreateDto) {
-		var kek = createMapper.reminderCreateDtoToReminder(reminderCreateDto);
-		System.out.println(kek);
+	
 		return Optional.ofNullable(reminderCreateDto)
 			.map(createMapper::reminderCreateDtoToReminder)
+			.map(reminder -> {
+				var user = userService.findById(reminderCreateDto.userId());
+				reminder.setUser(user);
+				return reminder;
+			})
 			.map(reminderRepository::saveAndFlush)
 			.map(readMapper::reminderToReminderReadDto)
 			.orElse(null);
