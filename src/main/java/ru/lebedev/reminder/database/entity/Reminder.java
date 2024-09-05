@@ -1,4 +1,4 @@
-package remainder.database.entity;
+package ru.lebedev.remainder.database.entity;
 
 import java.time.LocalDate;
 
@@ -21,16 +21,20 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @Entity
-@Table(name = "remainders")
+@Table(name = "remainder")
 public class Reminder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@Column(nullable = false)
 	private String title;
+	
 	@Column(nullable = false)
 	private String description;
+	
 	private LocalDate remind;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private User user;

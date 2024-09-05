@@ -1,4 +1,4 @@
-package remainder.database.entity;
+package ru.lebedev.remainder.database.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +11,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@Data
 @Table(name = "users")
 public class User {
 	@Id

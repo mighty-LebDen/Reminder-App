@@ -1,4 +1,4 @@
-package remainder.database.repository;
+package ru.lebedev.remainder.database.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

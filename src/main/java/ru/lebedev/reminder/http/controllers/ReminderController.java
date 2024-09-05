@@ -1,4 +1,4 @@
-package remainder.http.controllers;
+package ru.lebedev.remainder.http.controllers;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
