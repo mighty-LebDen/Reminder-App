@@ -23,13 +23,14 @@ import ru.lebedev.reminder.filters.QPredicates;
 import ru.lebedev.reminder.filters.ReminderSearchFilter;
 import ru.lebedev.reminder.mapper.ReminderCreateMapper;
 import ru.lebedev.reminder.mapper.ReminderReadMapper;
+import ru.lebedev.reminder.service.UserService;
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class ReminderService {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     private final ReminderRepository reminderRepository;
     private final ReminderCreateMapper createMapper = Mappers.getMapper(ReminderCreateMapper.class);
