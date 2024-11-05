@@ -1,5 +1,12 @@
 package ru.lebedev.reminder.dto;
 
-public record UserCreateEditDto(String username,
-                                String password,
-                                String telegramUsername) {}
+import jakarta.validation.constraints.Email;
+import lombok.Builder;
+
+@Builder
+public record UserCreateEditDto(
+        @Email
+        String username,
+        String password,
+        String telegram
+) {}
