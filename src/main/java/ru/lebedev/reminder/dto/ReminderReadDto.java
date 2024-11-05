@@ -1,9 +1,10 @@
 package ru.lebedev.reminder.dto;
 
-import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 public record ReminderReadDto(Long id,
                               String title,
                               String description,
-                              LocalDate remind) {}
+                              LocalDateTime remind,
+                              UserReadDto userReadDto
+) {}
