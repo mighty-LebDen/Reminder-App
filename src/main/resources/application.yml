@@ -4,7 +4,7 @@ spring:
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/remainder
+    url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
@@ -13,10 +13,35 @@ spring:
           auto: update
         show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            redirect-uri: http://localhost:8081/login/oauth2/code/google
+            scope: email, profile
+  mail:
+    host: smtp.yandex.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+scheduling:
+  interval: 60000
+
+
 url:
   api: /api/v1/reminder
   users: /api/v1/user
 server:
   port: 8081
+
