@@ -7,4 +7,7 @@ import ru.lebedev.reminder.dto.UserReadDto;
 public interface UserService {
 	User findById(Long id);
 	UserReadDto create(UserCreateEditDto dto);
+
+	UserReadDto findByUsername(String email);
+
 }
