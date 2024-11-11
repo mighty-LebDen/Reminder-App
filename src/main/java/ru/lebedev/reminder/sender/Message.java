@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record Message(
-        String email,
+        String username,
         String title,
         String description
 ) {}
