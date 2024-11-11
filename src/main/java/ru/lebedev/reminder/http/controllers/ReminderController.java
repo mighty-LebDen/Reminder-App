@@ -1,8 +1,8 @@
 package ru.lebedev.reminder.http.controllers;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import ru.lebedev.reminder.dto.ReminderCreateEditDto;
 import ru.lebedev.reminder.dto.ReminderReadDto;
-import ru.lebedev.reminder.exception.ReminderNotFoundException;
 import ru.lebedev.reminder.filters.DateAndTimeFilter;
 import ru.lebedev.reminder.filters.SearchFilter;
 import ru.lebedev.reminder.service.impl.ReminderService;
@@ -31,9 +30,8 @@ public class ReminderController {
     private final ReminderService reminderService;
 
     @PostMapping("/create")
-    public ReminderReadDto create(@Validated @RequestBody ReminderCreateEditDto dto) {
-        return Optional.ofNullable(reminderService.create(dto))
-                       .orElseThrow(() -> new RuntimeException("bad"));
+    public ReminderReadDto create(@Validated @NotNull @RequestBody ReminderCreateEditDto dto) {
+        return reminderService.create(dto);
     }
 
     @GetMapping("/list")
@@ -47,8 +45,7 @@ public class ReminderController {
     public ReminderReadDto update(
             @PathVariable @Positive Long id,
             @Validated @RequestBody ReminderCreateEditDto request) {
-        var reminder = reminderService.update(id, request);
-        return reminder.orElseThrow(() -> new ReminderNotFoundException(id));
+        return reminderService.update(id, request);
     }
 
     @DeleteMapping("/{id}/delete")
