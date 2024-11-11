@@ -15,16 +15,10 @@ import ru.lebedev.reminder.http.controllers.ReminderController;
 @RestControllerAdvice(assignableTypes = {ReminderController.class})
 public class ExceptionHandler4ReminderController {
 
-    @ExceptionHandler(ReminderNotFoundException.class)
-    public ResponseEntity<String> handleReminderNotFoundException(ReminderNotFoundException e) {
-        log.error("Error occurred: {}", e.getMessage(), e);
-        return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
-        log.error("Error occurred: {}", e.getMessage(), e);
-        return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+    @ExceptionHandler(ReminderServiceException.class)
+    public ResponseEntity<String> handleReminderNotFoundException(ReminderServiceException e) {
+        log.error("Error occurred: {}, status: {}", e.getMessage(), e.getExceptionStatus());
+        return ResponseEntity.status(BAD_REQUEST).body(e.getExceptionStatus().name());
     }
 
     @ExceptionHandler(Exception.class)
@@ -38,7 +32,6 @@ public class ExceptionHandler4ReminderController {
         log.error("Invalid argument", e);
         return ResponseEntity.status(BAD_REQUEST).body("Invalid argument");
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
