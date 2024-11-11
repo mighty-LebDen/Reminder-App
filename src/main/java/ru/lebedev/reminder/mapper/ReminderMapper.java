@@ -6,15 +6,19 @@ import org.mapstruct.MappingTarget;
 
 import ru.lebedev.reminder.database.entity.Reminder;
 import ru.lebedev.reminder.dto.ReminderCreateEditDto;
+import ru.lebedev.reminder.dto.ReminderReadDto;
 
 @Mapper
-public interface ReminderCreateMapper {
+public interface ReminderMapper {
 
     @Mapping(target = "id", ignore = true)
-    Reminder reminderCreateDtoToReminder(ReminderCreateEditDto dto);
+    Reminder toEntity(ReminderCreateEditDto dto);
 
     @Mapping(target = "id", ignore = true)
     void updateEntity(ReminderCreateEditDto dto, @MappingTarget Reminder reminder);
+
+    @Mapping(target = "userReadDto", source = "user")
+    ReminderReadDto toDto(Reminder reminder);
 
 
 
