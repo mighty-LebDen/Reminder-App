@@ -37,11 +37,14 @@ spring:
 
 scheduling:
   interval: 60000
-
+telegram:
+  bot:
+    username: ${BOT_USERNAME}
+    token: ${BOT_TOKEN}
 
 url:
   api: /api/v1/reminder
-  users: /api/v1/user
+  user: /api/v1/reminder/user
 server:
   port: 8081
 
