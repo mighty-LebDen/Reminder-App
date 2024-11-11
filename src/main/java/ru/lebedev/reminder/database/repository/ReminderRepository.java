@@ -15,12 +15,22 @@ public interface ReminderRepository extends
         ReminderCustomRepository,
         QuerydslPredicateExecutor<Reminder> {
 
-    @Query("select r from Reminder r where r.status = 'NOT_SENT' AND r.remind <= :now")
-    List<Reminder> findReminderByRemindBefore(@Param("now") LocalDateTime now);
+    @Query("select r from Reminder r where r.emailSentStatus = 'NOT_SENT' AND r.remind <= :now")
+    List<Reminder> findReminderToEmailSent(@Param("now") LocalDateTime now);
+
+    @Query("select r from Reminder r join fetch r.user u "
+           + "where r.telegramSentStatus = 'NOT_SENT' "
+           + "AND u.chatId is not null "
+           + "AND r.remind <= :now")
+    List<Reminder> findReminderToTelegramSent(@Param("now") LocalDateTime now);
 
     @Modifying
-    @Query("UPDATE Reminder r SET r.status = :status WHERE r.id = :id")
-    void updateStatus(@Param("id") Long id, @Param("status") SentStatus status);
+    @Query("UPDATE Reminder r SET r.emailSentStatus = :status WHERE r.id = :id")
+    void updateEmailSentStatus(@Param("id") Long id, @Param("status") SentStatus status);
+
+    @Modifying
+    @Query("UPDATE Reminder r SET r.telegramSentStatus = :status WHERE r.id = :id")
+    void updateTelegramSentStatus(@Param("id") Long id, @Param("status") SentStatus status);
 
 
 }
