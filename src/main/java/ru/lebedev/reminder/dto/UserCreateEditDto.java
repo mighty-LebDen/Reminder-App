@@ -8,5 +8,6 @@ public record UserCreateEditDto(
         @Email
         String username,
         String password,
-        String telegram
+        String telegram,
+        Long chatId
 ) {}
