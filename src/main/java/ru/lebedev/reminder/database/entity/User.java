@@ -1,5 +1,6 @@
 package ru.lebedev.reminder.database.entity;
 
+import jakarta.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +25,18 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@Column(name = "username")
 	private String username;
-	
+
+	@Column(name = "password")
 	private String password;
-	
+
+	@Column(name = "telegram")
 	private String telegram;
+
+	@Column(name = "chat_id")
+	private Long chatId;
 	
 	@OneToMany(mappedBy = "user", orphanRemoval = true)
 	@Builder.Default
