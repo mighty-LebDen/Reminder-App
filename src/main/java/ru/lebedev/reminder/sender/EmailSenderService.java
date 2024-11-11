@@ -9,8 +9,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import ru.lebedev.reminder.database.entity.SentStatus;
-import ru.lebedev.reminder.dto.ReminderReadDto;
-import ru.lebedev.reminder.listner.EmailSentEvent;
+import ru.lebedev.reminder.listner.SentEvent;
+import ru.lebedev.reminder.listner.SentType;
 
 @Service
 @RequiredArgsConstructor
@@ -24,30 +24,31 @@ public class EmailSenderService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public void sendSimpleEmail(ReminderReadDto reminder) throws MailException {
+    public void sendSimpleEmail(Message messageToSend, Long reminderId) {
         SimpleMailMessage message = new SimpleMailMessage();
-        var messageToSend = createMessage(reminder);
-        message.setTo(messageToSend.email());
+        message.setTo(messageToSend.username());
         message.setSubject(messageToSend.title());
         message.setText(messageToSend.description());
         message.setFrom(sender);
         log.info(sender);
         try {
             mailSender.send(message);
-            eventPublisher.publishEvent(new EmailSentEvent(this, reminder, SentStatus.SENT));
+            eventPublisher.publishEvent(new SentEvent(
+                    this,
+                    reminderId,
+                    SentStatus.SENT,
+                    SentType.EMAIL
+            ));
         } catch (MailException exception) {
-            eventPublisher.publishEvent(new EmailSentEvent(this, reminder, SentStatus.FAILED));
+            eventPublisher.publishEvent(new SentEvent(
+                    this,
+                    reminderId,
+                    SentStatus.FAILED,
+                    SentType.EMAIL
+            ));
             log.error("smth wrong in sending mail");
         }
 
-    }
-
-    private Message createMessage(ReminderReadDto reminder) {
-        return Message.builder()
-                      .title(reminder.title())
-                      .description(reminder.description())
-                      .email(reminder.userReadDto().username())
-                      .build();
     }
 
 }
