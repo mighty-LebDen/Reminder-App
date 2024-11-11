@@ -24,19 +24,20 @@ import lombok.ToString;
 @ToString(exclude = "user")
 @Builder
 @Entity
-@Table(name = "remainder")
+@Table(name = "reminder")
 public class Reminder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "title")
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "description")
     private String description;
 
+    @Column(name = "remind")
     private LocalDateTime remind;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -45,6 +46,10 @@ public class Reminder {
 
     @Column(name = "is_sent")
     @Enumerated(EnumType.STRING)
-    private SentStatus status;
+    private SentStatus emailSentStatus;
+
+    @Column(name = "is_sent_telegram")
+    @Enumerated(EnumType.STRING)
+    private SentStatus telegramSentStatus;
 
 }
