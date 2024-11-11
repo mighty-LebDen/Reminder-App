@@ -24,7 +24,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        String email = oAuth2User.getAttribute("email");
+        String email = oAuth2User.getAttribute("username");
         log.info(email);
         var userReadDto = userServiceImpl.findByUsername(email);
 
