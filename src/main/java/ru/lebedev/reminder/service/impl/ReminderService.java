@@ -16,12 +16,11 @@ import ru.lebedev.reminder.database.entity.SentStatus;
 import ru.lebedev.reminder.database.repository.ReminderRepository;
 import ru.lebedev.reminder.dto.ReminderCreateEditDto;
 import ru.lebedev.reminder.dto.ReminderReadDto;
-import ru.lebedev.reminder.exception.ReminderNotFoundException;
-import ru.lebedev.reminder.exception.UserNotFoundException;
+import ru.lebedev.reminder.exception.ExceptionStatus;
+import ru.lebedev.reminder.exception.ReminderServiceException;
 import ru.lebedev.reminder.filters.DateAndTimeFilter;
 import ru.lebedev.reminder.filters.SearchFilter;
-import ru.lebedev.reminder.mapper.ReminderCreateMapper;
-import ru.lebedev.reminder.mapper.ReminderReadMapper;
+import ru.lebedev.reminder.mapper.ReminderMapper;
 import ru.lebedev.reminder.service.UserService;
 
 @RequiredArgsConstructor
@@ -33,63 +32,79 @@ public class ReminderService {
     private final UserService userService;
 
     private final ReminderRepository reminderRepository;
-    private final ReminderCreateMapper createMapper = Mappers.getMapper(ReminderCreateMapper.class);
-    private final ReminderReadMapper readMapper = Mappers.getMapper(ReminderReadMapper.class);
+    private final ReminderMapper reminderMapper = Mappers.getMapper(ReminderMapper.class);
 
     @Transactional
     public ReminderReadDto create(ReminderCreateEditDto reminderCreateDto) {
-        return Optional.ofNullable(reminderCreateDto)
-                       .map(createMapper::reminderCreateDtoToReminder)
+        var userId = reminderCreateDto.userId();
+        return Optional.of(reminderCreateDto)
+                       .map(reminderMapper::toEntity)
                        .map(reminder -> {
-                           var user = Optional.ofNullable(userService.findById(reminderCreateDto.userId()))
-                                              .orElseThrow(() -> new UserNotFoundException(
-                                                      reminderCreateDto.userId()));
+                           var user = Optional.ofNullable(userService.findById(userId))
+                                              .orElseThrow(() -> new ReminderServiceException(
+                                                      "user with %d id not found".formatted(
+                                                              userId),
+                                                      ExceptionStatus.USER_NOT_FOUND_EXCEPTION
+                                              ));
                            reminder.setUser(user);
-                           reminder.setStatus(SentStatus.NOT_SENT);
+                           reminder.setEmailSentStatus(SentStatus.NOT_SENT);
                            return reminder;
                        })
                        .map(reminderRepository::saveAndFlush)
-                       .map(readMapper::reminderToReminderReadDto)
-                       .orElseThrow(() -> new RuntimeException("error in create Remind"));
+                       .map(reminderMapper::toDto)
+                       .orElseThrow(() -> new ReminderServiceException(
+                               "remind create issue",
+                               ExceptionStatus.REMINDER_CREATE_ISSUE
+                       ));
     }
 
     public List<ReminderReadDto> findAllWithPagination(Pageable pageable) {
         return reminderRepository.findAll(pageable)
-                                 .map(readMapper::reminderToReminderReadDto)
+                                 .map(reminderMapper::toDto)
                                  .toList();
     }
 
     @Transactional
-    public boolean delete(Long id) {
+    public void delete(Long id) {
         reminderRepository.findById(id)
                           .map(reminder -> {
                               reminderRepository.delete(reminder);
                               reminderRepository.flush();
                               return true;
-                          }).orElseThrow(() -> new ReminderNotFoundException(id));
-        return false;
+                          })
+                          .orElseThrow(() -> new ReminderServiceException(
+                                  "Remind with %d id, not found".formatted(id),
+                                  ExceptionStatus.REMINDER_NOT_FOUND_EXCEPTION
+                          ));
     }
 
     @Transactional
-    public Optional<ReminderReadDto> update(Long id, ReminderCreateEditDto dto) {
+    public ReminderReadDto update(Long id, ReminderCreateEditDto dto) {
         var reminder = reminderRepository.findById(id)
-                                         .orElseThrow(() -> new ReminderNotFoundException(id));
-        createMapper.updateEntity(dto, reminder);
+                                         .orElseThrow(() -> new ReminderServiceException(
+                                                 "Remind with %d id, not found".formatted(id),
+                                                 ExceptionStatus.REMINDER_NOT_FOUND_EXCEPTION
+                                         ));
+        reminderMapper.updateEntity(dto, reminder);
         return Optional.of(reminderRepository.saveAndFlush(reminder))
-                       .map(readMapper::reminderToReminderReadDto);
+                       .map(reminderMapper::toDto)
+                       .orElseThrow(() -> new ReminderServiceException(
+                               "remind update issue",
+                               ExceptionStatus.REMINDER_UPDATE_ISSUE
+                       ));
     }
 
     public List<ReminderReadDto> findAllByDateAndTimeFilter(DateAndTimeFilter filter) {
         return reminderRepository.findAllByFilter(filter)
                                  .stream()
-                                 .map(readMapper::reminderToReminderReadDto)
+                                 .map(reminderMapper::toDto)
                                  .toList();
     }
 
     public List<ReminderReadDto> findAllBySearchFilter(SearchFilter filter) {
         return reminderRepository.findAllBySearchFilter(filter)
                                  .stream()
-                                 .map(readMapper::reminderToReminderReadDto)
+                                 .map(reminderMapper::toDto)
                                  .toList();
     }
 
@@ -99,21 +114,32 @@ public class ReminderService {
         Sort sort = Sort.by(sortDirection, field);
         return reminderRepository.findAll(sort)
                                  .stream()
-                                 .map(readMapper::reminderToReminderReadDto)
+                                 .map(reminderMapper::toDto)
                                  .toList();
     }
 
     @Transactional
-    public void updateStatus(Long id, SentStatus status) {
-        reminderRepository.updateStatus(id, status);
+    public void updateEmailSentStatus(Long id, SentStatus status) {
+        reminderRepository.updateEmailSentStatus(id, status);
     }
 
-    public List<ReminderReadDto> findReminderByRemindBefore(LocalDateTime now) {
-        return reminderRepository.findReminderByRemindBefore(now)
-                                 .stream()
-                                 .map(readMapper::reminderToReminderReadDto)
-                                 .toList();
+    @Transactional
+    public void updateTelegramSentStatus(Long id, SentStatus status) {
+        reminderRepository.updateTelegramSentStatus(id, status);
+    }
 
+    public List<ReminderReadDto> findReminderToEmailSent(LocalDateTime now) {
+        return reminderRepository.findReminderToEmailSent(now)
+                                 .stream()
+                                 .map(reminderMapper::toDto)
+                                 .toList();
+    }
+
+    public List<ReminderReadDto> findReminderToTelegramSent(LocalDateTime now) {
+        return reminderRepository.findReminderToTelegramSent(now)
+                                 .stream()
+                                 .map(reminderMapper::toDto)
+                                 .toList();
     }
 
 }
