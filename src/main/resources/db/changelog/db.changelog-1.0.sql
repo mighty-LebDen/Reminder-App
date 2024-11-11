@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users
 
 
 --changelog dlebedev:1
-CREATE TABLE IF NOT EXISTS remainders
+CREATE TABLE IF NOT EXISTS reminder
 (
     id          BIGSERIAL PRIMARY KEY,
     title       varchar(255)  NOT NULL,
