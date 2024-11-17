@@ -12,7 +12,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import ru.lebedev.reminder.database.entity.Reminder;
 import ru.lebedev.reminder.database.repository.ReminderCustomRepository;
-import ru.lebedev.reminder.filters.DateAndTimeFilter;
+import ru.lebedev.reminder.filters.DateTimeFilter;
 import ru.lebedev.reminder.filters.QPredicates;
 import ru.lebedev.reminder.filters.SearchFilter;
 
@@ -22,7 +22,7 @@ public class ReminderCustomRepositoryImpl implements ReminderCustomRepository {
     private final EntityManager entityManager;
 
     @Override
-    public List<Reminder> findAllByFilter(DateAndTimeFilter filter) {
+    public List<Reminder> findAllByDateTimeFilter(DateTimeFilter filter) {
         var predicates = QPredicates.builder()
                                     .add(
                                             Optional.ofNullable(filter.dateBefore())

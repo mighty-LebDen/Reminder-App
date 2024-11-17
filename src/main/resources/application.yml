@@ -1,4 +1,9 @@
 spring:
+  profiles:
+    active: local
+  liquibase:
+    change-log: classpath*:db/changelog/db.changelog-master.yaml
+    enabled: true
   application:
     name: remainder-app
   datasource:
@@ -10,7 +15,7 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          auto: update
+          auto: validate
         show_sql: true
         format_sql: true
     open-in-view: false
@@ -39,7 +44,7 @@ scheduling:
   interval: 60000
 telegram:
   bot:
-    username: ${BOT_USERNAME}
+    username: ${random.uuid}
     token: ${BOT_TOKEN}
 
 url:

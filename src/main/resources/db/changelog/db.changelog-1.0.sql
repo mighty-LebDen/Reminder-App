@@ -1,15 +1,16 @@
 --liquibase formatted sql
 
---changelog dlebedev:1
+--changeset dlebedev:1
 CREATE TABLE IF NOT EXISTS users
 (
     id       BIGSERIAL PRIMARY KEY,
     username varchar(128) NOT NULL UNIQUE,
-    password varchar(128) NOT NULL
+    password varchar(128) NOT NULL,
+    telegram varchar(128)
 );
 
 
---changelog dlebedev:1
+--changeset dlebedev:2
 CREATE TABLE IF NOT EXISTS reminder
 (
     id          BIGSERIAL PRIMARY KEY,

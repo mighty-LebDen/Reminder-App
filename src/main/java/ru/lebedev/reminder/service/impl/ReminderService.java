@@ -18,7 +18,7 @@ import ru.lebedev.reminder.dto.ReminderCreateEditDto;
 import ru.lebedev.reminder.dto.ReminderReadDto;
 import ru.lebedev.reminder.exception.ExceptionStatus;
 import ru.lebedev.reminder.exception.ReminderServiceException;
-import ru.lebedev.reminder.filters.DateAndTimeFilter;
+import ru.lebedev.reminder.filters.DateTimeFilter;
 import ru.lebedev.reminder.filters.SearchFilter;
 import ru.lebedev.reminder.mapper.ReminderMapper;
 import ru.lebedev.reminder.service.UserService;
@@ -47,7 +47,6 @@ public class ReminderService {
                                                       ExceptionStatus.USER_NOT_FOUND_EXCEPTION
                                               ));
                            reminder.setUser(user);
-                           reminder.setEmailSentStatus(SentStatus.NOT_SENT);
                            return reminder;
                        })
                        .map(reminderRepository::saveAndFlush)
@@ -94,8 +93,8 @@ public class ReminderService {
                        ));
     }
 
-    public List<ReminderReadDto> findAllByDateAndTimeFilter(DateAndTimeFilter filter) {
-        return reminderRepository.findAllByFilter(filter)
+    public List<ReminderReadDto> findAllByDateAndTimeFilter(DateTimeFilter filter) {
+        return reminderRepository.findAllByDateTimeFilter(filter)
                                  .stream()
                                  .map(reminderMapper::toDto)
                                  .toList();

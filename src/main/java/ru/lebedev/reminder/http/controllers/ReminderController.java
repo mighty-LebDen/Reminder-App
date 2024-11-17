@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import ru.lebedev.reminder.dto.ReminderCreateEditDto;
 import ru.lebedev.reminder.dto.ReminderReadDto;
-import ru.lebedev.reminder.filters.DateAndTimeFilter;
+import ru.lebedev.reminder.filters.DateTimeFilter;
 import ru.lebedev.reminder.filters.SearchFilter;
 import ru.lebedev.reminder.service.impl.ReminderService;
 
@@ -68,7 +68,7 @@ public class ReminderController {
     }
 
     @GetMapping("/filter")
-    public List<ReminderReadDto> findAllByFilter(@Validated @RequestBody DateAndTimeFilter filter) {
+    public List<ReminderReadDto> findAllByFilter(@Validated @RequestBody DateTimeFilter filter) {
         return reminderService.findAllByDateAndTimeFilter(filter);
     }
 
