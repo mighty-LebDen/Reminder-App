@@ -13,11 +13,13 @@ import ru.lebedev.reminder.dto.UserReadDto;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "reminders", ignore = true)
     User toEntity(UserCreateEditDto dto);
 
     UserReadDto toDto(User user);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "reminders", ignore = true)
     void updateEntity(UserCreateEditDto dto, @MappingTarget User user);
 
 }

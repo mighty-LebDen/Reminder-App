@@ -24,11 +24,11 @@ public interface ReminderRepository extends
            + "AND r.remind <= :now")
     List<Reminder> findReminderToTelegramSent(@Param("now") LocalDateTime now);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("UPDATE Reminder r SET r.emailSentStatus = :status WHERE r.id = :id")
     void updateEmailSentStatus(@Param("id") Long id, @Param("status") SentStatus status);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("UPDATE Reminder r SET r.telegramSentStatus = :status WHERE r.id = :id")
     void updateTelegramSentStatus(@Param("id") Long id, @Param("status") SentStatus status);
 
