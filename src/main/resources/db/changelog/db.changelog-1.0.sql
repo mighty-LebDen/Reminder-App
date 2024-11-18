@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users
 (
     id       BIGSERIAL PRIMARY KEY,
     username varchar(128) NOT NULL UNIQUE,
-    password varchar(128) NOT NULL,
+    password varchar(128),
     telegram varchar(128)
 );
 
