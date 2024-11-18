@@ -4,6 +4,7 @@ spring:
     password: test
     username: test
     driver-class-name: org.postgresql.Driver
+
   jpa:
     properties:
       hibernate:
@@ -12,7 +13,6 @@ spring:
         hbm2ddl:
           auto: validate
 
-BOT_TOKEN: 8159140552:AAFFCLYLZX_3LDNP5V5JWxUY5ji5ubRu_88
-BOT_USERNAME: my_reminder_service_bot
+
 
 

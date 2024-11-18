@@ -44,3 +44,4 @@ bin/
 ### Mac OS ###
 .DS_Store
 /src/main/resources/application-local.yml
+/src/test/resources/application-testlocal.yml

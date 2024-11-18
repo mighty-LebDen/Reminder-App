@@ -44,7 +44,7 @@ scheduling:
   interval: 60000
 telegram:
   bot:
-    username: ${random.uuid}
+    username: ${BOT_USERNAME}
     token: ${BOT_TOKEN}
 
 url:
