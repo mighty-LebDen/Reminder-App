@@ -4,6 +4,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 .idea
+!**/src/main/resources/application-local.yml
+.env
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -41,3 +43,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/src/main/resources/application-local.yml
+/src/test/resources/application-testlocal.yml
+/src/main/resources/application-dev.yml
